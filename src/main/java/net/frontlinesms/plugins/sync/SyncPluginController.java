@@ -11,12 +11,13 @@ import net.frontlinesms.events.FrontlineEventNotification;
 import net.frontlinesms.plugins.BasePluginController;
 import net.frontlinesms.plugins.PluginControllerProperties;
 import net.frontlinesms.plugins.PluginInitialisationException;
+import net.frontlinesms.plugins.PluginSettingsController;
 import net.frontlinesms.plugins.sync.ui.SyncPluginThinletTabController;
 import net.frontlinesms.ui.UiGeneratorController;
 
 import org.springframework.context.ApplicationContext;
 
-@PluginControllerProperties(name = "Basic Plugin",
+@PluginControllerProperties(name = "SMS Sync Plugin",
 		iconPath = "/icons/basicplugin_logo_small.png",
 		springConfigLocation=PluginControllerProperties.NO_VALUE,
 		hibernateConfigPath=PluginControllerProperties.NO_VALUE,
@@ -63,6 +64,15 @@ public class SyncPluginController extends BasePluginController implements EventO
 		this.appCon = applicationContext;
 		this.frontlineController = frontlineController;
 		
+		// Create the queue processor
+		createQueueProcessor();
+		
+		setEventBus(frontlineController.getEventBus());
+		this.eventBus.registerObserver(this);
+		
+	}
+	
+	private void createQueueProcessor() {
 		QueueProcessor queueProcessor = new QueueProcessor();
 		// TODO configure syncher depending on settings
 		
@@ -77,7 +87,7 @@ public class SyncPluginController extends BasePluginController implements EventO
 		// Set the synchronisation URL on the UI
 		
 		// Instantiate the message syncher
-		MessageSyncher syncher = new MessageSyncher(syncURL);
+		MessageSyncher syncher = new MessageSyncher(syncURL, syncProperties.getParamsMap());
 		syncher.setRequestMethod(syncProperties.getRequestMethod());
 		
 		queueProcessor.setMessageSyncher(syncher);
@@ -92,26 +102,12 @@ public class SyncPluginController extends BasePluginController implements EventO
 			this.queueProcessor.start();
 		}
 		
-		setEventBus(frontlineController.getEventBus());
-		this.eventBus.registerObserver(this);
-		
-//		this.tabController.refresh();
 	}
 
 	public void deinit() {
-		SyncPluginProperties properties = SyncPluginProperties.getInstance();
-		
-		// Save the current configuration
-		properties.setStartupMode(this.tabController.getStartupMode());
-		String url = this.tabController.getSynchronisationURL();
-		properties.setSynchronisationURL(url);
-		
-		// Save the new settings to disk
-		properties.saveToDisk();
-		
 		// Shutdown message processor and discard
 		this.eventBus.unregisterObserver(this);
-		this.queueProcessor.stopProcessing();
+		setQueueProcessorStatus(false);
 	}
 
 	private void queueUnsynchronizedMessages() {
@@ -130,11 +126,36 @@ public class SyncPluginController extends BasePluginController implements EventO
 				// Get the frontline message instance
 				FrontlineMessage m = (FrontlineMessage) databaseEntity;
 				
-				// Only trap for received messages
-				if (m.getType() == FrontlineMessage.Type.RECEIVED) {
+				// Only trap for received messages when the queue processor is running
+				boolean isAlive = this.queueProcessor != null && this.queueProcessor.isAlive();
+				if (m.getType() == FrontlineMessage.Type.RECEIVED && isAlive) {
 					this.queueProcessor.queue(m);
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Sets the state of the queue processor. If <code>false</code> the queue processor
+	 * is paused else its resumed
+	 * 
+	 * @param state
+	 */
+	public synchronized void setQueueProcessorStatus(boolean state) {
+		if (state) {
+			// Re-create the queue processor
+			createQueueProcessor();
+		} else {
+			// Stop the queue processor
+			this.queueProcessor.stopProcessing();
+			
+			// Destroy the current queue processor reference
+			this.queueProcessor = null;
+		}
+	}
+	
+	@Override
+	public PluginSettingsController getSettingsController(UiGeneratorController ui) {
+		return new SyncPluginSettingsController(ui);
 	}
 }

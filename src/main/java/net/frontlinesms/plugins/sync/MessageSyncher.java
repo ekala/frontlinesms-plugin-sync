@@ -7,36 +7,56 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.Map.Entry;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import org.apache.log4j.Logger;
 
 import net.frontlinesms.FrontlineUtils;
 import net.frontlinesms.data.domain.FrontlineMessage;
+import net.frontlinesms.data.domain.KeywordAction.KeywordUtils;
+import net.frontlinesms.messaging.MessageFormatter;
 
 /**
  * @author ekala
  *
  */
 public class MessageSyncher {
-	private String synchronisationURL;
+	private static final String POST = "POST";
+	private static final String GET = "GET";
+	/** HTTP request method name */
 	private String requestMethod ;
+	/**Base URL */
+	private String baseURL;
 	
-	public MessageSyncher(String synchronisationURL) {
-		setSynchronisationURL(synchronisationURL);
+	/** Stores the key=>value mapping of the URL variables */
+	private Map<String, String> templateParams;
+	/** Loggger */
+	private static final Logger LOG = FrontlineUtils.getLogger(MessageSyncher.class);
+	
+//> CONSTRUCTORS 
+	/**
+	 * Constructor for this class
+	 * 
+	 * @param synchronisationURL URL to be synchronised to
+	 */
+	public MessageSyncher(String synchronisationURL, Map<String ,String> paramMap) {
+//		setSynchronisationURL(synchronisationURL);
+		this.baseURL = synchronisationURL;
+		this.templateParams = paramMap;
 	}
 	
+	/** Empty constructor */
 	public MessageSyncher() { }
 	
-	/** Sets for the synchronisation URL @param synchronsationURL */
-	public void setSynchronisationURL(String synchronisationURL) {
-		this.synchronisationURL = synchronisationURL;
-		
-		// Extract URL parameters from the URL
-	}
-
+	
 	boolean syncMessage(FrontlineMessage message) {
-		Map<String, String> paramMap = createParamMap(message);
-		return doPost(getUrl(), paramMap);
+		Map<String, String> paramMap = createRequestParam(message);
+		return doHttpRequest(paramMap);
 	}
 
 	/** Sets the request method for the syncher */
@@ -49,21 +69,34 @@ public class MessageSyncher {
 		return requestMethod;
 	}
 	
-	private boolean doPost(String url, Map<String, String> paramMap) {
+	/** Performs a HTTP request; GET or POST */
+	private boolean doHttpRequest(Map<String, String> paramMap) {
 		String data = buildRequestString(paramMap);
+
+		String url = this.baseURL;
+		if(requestMethod.equals(GET)) {
+			url += '?' + data;
+		}
+		
+		// Modify the url depending on the request method
+		LOG.debug("Sending synchronisation request: " + url);
 		
 		HttpURLConnection conn = null;
 		OutputStreamWriter out = null;
 		try {
 			conn = (HttpURLConnection) new URL(url).openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestMethod(requestMethod);
 			
-			out = new OutputStreamWriter(conn.getOutputStream());
-			out.write(data);
-			out.flush();
+			if (requestMethod.equals(POST)) {
+				conn.setDoOutput(true);
+				conn.setRequestMethod(requestMethod);
+
+				out = new OutputStreamWriter(conn.getOutputStream());
+				out.write(data);
+				out.flush();
+			}
 			
 			return conn.getResponseCode() == HttpURLConnection.HTTP_OK;
+			
 		} catch (Exception e) {
 			return false;
 		} finally {
@@ -84,14 +117,21 @@ public class MessageSyncher {
 		return bob.length() > 0 ? bob.substring(1) : "";
 	}
 
-	private String getUrl() {
-		return synchronisationURL;
-	}
-
-	private Map<String, String> createParamMap(FrontlineMessage message) {
+	/** Creates a map of the parameters to be passed to the base url */
+	private Map<String, String> createRequestParam(FrontlineMessage message) {
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("sender", message.getSenderMsisdn());
-		params.put("text", message.getTextContent());
+		
+		for (Entry<String, String> entry: templateParams.entrySet()) {
+			String paramName = entry.getKey();
+			String val = MessageFormatter.formatMessage(entry.getValue(),
+					MessageFormatter.MARKER_SENDER_NUMBER,		/*->*/ message.getSenderMsisdn(),
+					// N.B. message content should always be substituted last to prevent injection attacks
+					MessageFormatter.MARKER_MESSAGE_CONTENT,	/*->*/ message.getTextContent() 
+					);
+			
+			params.put(paramName, val);
+		}
+		
 		return params;
 	}
 }

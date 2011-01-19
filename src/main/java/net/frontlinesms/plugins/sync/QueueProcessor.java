@@ -49,6 +49,7 @@ public class QueueProcessor extends Thread {
 		if(message != null) {
 			// Attempt to sync message and if it fails, put it back at the head of the queue
 			boolean success = messageSyncher.syncMessage(message);
+			LOG.debug("Synchronisation status: " + Boolean.toString(success));
 			if (success) {
 				// TODO save last processed message number
 				pluginProperties.setLastSyncedId(message);
@@ -71,10 +72,15 @@ public class QueueProcessor extends Thread {
 		this.queue.addAll(messages);
 	}
 
-	public void stopProcessing() {
+	public synchronized void stopProcessing() {
 		this.keepProcessing = false;
+		// Flush the queue
+		this.queue.clear();
+		
+		// Nullify the queue
+		this.queue = null;
 	}
-
+	
 	synchronized void queue(FrontlineMessage m) {
 		queue.add(m);
 	}
@@ -86,4 +92,5 @@ public class QueueProcessor extends Thread {
 	private synchronized FrontlineMessage poll() {
 		return queue.poll();
 	}
+
 }
