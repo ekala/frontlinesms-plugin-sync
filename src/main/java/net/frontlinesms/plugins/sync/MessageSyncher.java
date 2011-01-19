@@ -134,4 +134,11 @@ public class MessageSyncher {
 		
 		return params;
 	}
+	
+	/** Gets the HttpRequest URL used for synchronisation */
+	public String getHttpRequestURL(FrontlineMessage message) {
+		String urlVariables = buildRequestString(createRequestParam(message));
+		
+		return requestMethod.equals(GET)? this.baseURL + "?" + urlVariables : this.baseURL;
+	}
 }

@@ -65,15 +65,15 @@ public class SyncPluginController extends BasePluginController implements EventO
 		this.frontlineController = frontlineController;
 		
 		// Create the queue processor
-		createQueueProcessor();
+		createQueueProcessor(false);
 		
 		setEventBus(frontlineController.getEventBus());
 		this.eventBus.registerObserver(this);
 		
 	}
 	
-	private void createQueueProcessor() {
-		QueueProcessor queueProcessor = new QueueProcessor();
+	private void createQueueProcessor(boolean override) {
+		QueueProcessor queueProcessor = new QueueProcessor(this);
 		// TODO configure syncher depending on settings
 		
 		SyncPluginProperties syncProperties  = SyncPluginProperties.getInstance();
@@ -98,7 +98,7 @@ public class SyncPluginController extends BasePluginController implements EventO
 		queueUnsynchronizedMessages();
 		
 		// Automatically startup the queue processor only if the startup mode = TRUE
-		if (autoStartup) {
+		if (autoStartup || override) {
 			this.queueProcessor.start();
 		}
 		
@@ -144,7 +144,7 @@ public class SyncPluginController extends BasePluginController implements EventO
 	public synchronized void setQueueProcessorStatus(boolean state) {
 		if (state) {
 			// Re-create the queue processor
-			createQueueProcessor();
+			createQueueProcessor(true);
 		} else {
 			// Stop the queue processor
 			this.queueProcessor.stopProcessing();
@@ -157,5 +157,14 @@ public class SyncPluginController extends BasePluginController implements EventO
 	@Override
 	public PluginSettingsController getSettingsController(UiGeneratorController ui) {
 		return new SyncPluginSettingsController(ui);
+	}
+	
+	/** Updates the UI with the sync URL and sucess*/
+	public void updateSynchronisationLog(String requestURL, boolean success) {
+		// Only update the UI after the UI has been initalised 
+		if (this.tabController != null) {
+			String successText = (success)? "Succeeded!": "Failed!";
+			this.tabController.updateSynchronisationLog(requestURL + "..." + successText);
+		}
 	}
 }

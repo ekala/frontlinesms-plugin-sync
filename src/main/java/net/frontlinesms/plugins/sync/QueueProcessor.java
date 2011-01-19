@@ -17,6 +17,15 @@ public class QueueProcessor extends Thread {
 	private MessageSyncher messageSyncher;
 	private static SyncPluginProperties pluginProperties =  SyncPluginProperties.getInstance();
 	private static final Logger LOG =   FrontlineUtils.getLogger(QueueProcessor.class);
+	private SyncPluginController controller;
+
+	public QueueProcessor() {
+		
+	}
+	
+	public QueueProcessor(SyncPluginController controller) {
+		this.controller = controller;
+	}
 	
 	public void setMessageSyncher(MessageSyncher messageSyncher) {
 		this.messageSyncher = messageSyncher;
@@ -58,6 +67,12 @@ public class QueueProcessor extends Thread {
 				addToHead(message);
 				doubleSleepTime();
 			}
+			
+			if (this.controller != null) {
+				String requestURL = messageSyncher.getHttpRequestURL(message);
+				this.controller.updateSynchronisationLog(requestURL, success);
+			}
+			
 		} else {
 			doubleSleepTime();
 		}

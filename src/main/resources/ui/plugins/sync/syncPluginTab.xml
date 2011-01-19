@@ -16,6 +16,9 @@
 		
 		<!-- synchronisation log -->
 		<table name="tblSychronisationLog" weightx="1" weighty="1">
+			<header>
+				<column text="i18n.plugin.sync.synchronisation.log" width="500" />
+			</header>
 		</table>
 		<!-- /synchronisation log -->
 		

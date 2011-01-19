@@ -1,4 +1,4 @@
-<panel columns="2" gap="10" top="5" left="5" bottom="5" right="5" weightx="1" weighty="1">
+<panel columns="2" gap="10" top="5" left="5" bottom="5" right="5" weightx="1" weighty="1" border="true" text="i18n.plugin.sync.sms.sync.settings">
 	<label text="i18n.plugin.sync.synchronisation.url" />
 	<textfield name="tfUrl" action="hasChanged(this.name)" weightx="1" />
 	
@@ -10,10 +10,11 @@
 			<column text="i18n.plugin.sync.common.value"/>
 		</header>
 	</table>
-	
+
+	<label colspan="2" icon="/icons/about.png" text="i18n.plugin.sync.sms.sync.settings.notice" />
+		
 	<panel colspan="2" gap="10">
 		<button text="i18n.action.add" action="addParam"/>
 		<button text="i18n.action.delete" action="removeParam"/>
 	</panel>
-	
 </panel>
