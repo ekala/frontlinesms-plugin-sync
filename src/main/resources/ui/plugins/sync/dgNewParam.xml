@@ -1,0 +1,19 @@
+<dialog name="dgNewParam" columns="2" weightx="1" weighty="1" gap="10" top="5" right="5" bottom="5" left="5" modal="true">
+	<label text="i18n.plugin.sync.common.key"/>
+	<textfield name="tfParamKey"/>
+	<label text="i18n.plugin.sync.common.value"/>
+	<textfield name="tfParamValue"/>
+	
+	<panel colspan="2" gap="10" top="5" right="5" bottom="5" left="5">
+		<label text="Click to include:" />
+		<button name="btnSenderName" icon="/icons/sender.png" text="i18n.common.message.sender.name" action="addSenderNameParameter(tfParamValue)" />
+		<button name="btnSenderNumber" icon="/icons/sender_number.png" text="i18n.common.message.sender.number" action="addSenderNumberParameter(tfParamValue)" />
+		<button name="btnMessageContent" icon="/icons/message.png" text="i18n.common.message.content" action="addMessageContentParameter(tfParamValue)" />
+	</panel>
+	
+	<panel halign="right" colspan="2" gap="10" top="5" right="5" bottom="5" left="5">
+		<button text="i18n.action.ok" icon="/icons/tick.png" action="addParam(tfParamKey.text, tfParamValue.text)" />
+		<button text="i18n.action.cancel" icon="/icons/cross.png" action="removeDialog" />
+	</panel>
+		
+</dialog>

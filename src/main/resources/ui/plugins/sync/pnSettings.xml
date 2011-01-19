@@ -1,0 +1,19 @@
+<panel columns="2" gap="10" top="5" left="5" bottom="5" right="5" weightx="1" weighty="1">
+	<label text="i18n.plugin.sync.synchronisation.url" />
+	<textfield name="tfUrl" action="hasChanged(this.name)" weightx="1" />
+	
+	<checkbox colspan="2" name="chkStartupMode" text="i18n.plugin.sync.start.automatically" action="setStartupMode(this)"/>
+	
+	<table name="tbParams" weightx="1" weighty="1" colspan="2" perform="showParameterItem(this)">
+		<header>
+			<column text="i18n.plugin.sync.common.key"/>
+			<column text="i18n.plugin.sync.common.value"/>
+		</header>
+	</table>
+	
+	<panel colspan="2" gap="10">
+		<button text="i18n.action.add" action="addParam"/>
+		<button text="i18n.action.delete" action="removeParam"/>
+	</panel>
+	
+</panel>
