@@ -108,8 +108,8 @@ public class SyncPluginThinletTabController extends BasePluginThinletTabControll
 	}
 	
 	private void modifySynchronisationState(Object stopButton, Object startButton, boolean state) {
-		// Set the selection status of the "auto start" checkbox
-		ui.setSelected(getStartupModeCheckBox(), state);
+		// Set the selection status of the "auto start" checkbox to the current value in  the properties file
+		ui.setSelected(getStartupModeCheckBox(), SyncPluginProperties.getInstance().isAutomaticStartup());
 		
 		// Enable/Disable UI controls
 		ui.setEnabled(stopButton, state);
