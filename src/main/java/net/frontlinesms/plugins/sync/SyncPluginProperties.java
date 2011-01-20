@@ -11,15 +11,18 @@ import net.frontlinesms.data.domain.FrontlineMessage;
 import net.frontlinesms.resources.UserHomeFilePropertySet;
 
 public class SyncPluginProperties extends UserHomeFilePropertySet {
-	private static final String PROP_LAST_ID = "sync.last.id";
-	private static final String PROP_SYNC_URL = "sync.url";
-	private static final String PROP_REQUEST_METHOD = "sync.request.method";
-	private static final String PROP_STARTUP_MODE = "sync.startup.mode";
+//> PROPERTY KEYS
+	public static final String PROP_LAST_ID = "sync.last.id";
+	public static final String PROP_SYNC_URL = "sync.url";
+	public static final String PROP_REQUEST_METHOD = "sync.request.method";
+	public static final String PROP_AUTO_START = "sync.autostart";
 	private static final String PROP_PARAM_KEYS = "sync.param.key";
 	private static final String PROP_PARAM_VALS = "sync.param.value";
+	
+	/** Singleton instance for this class */
 	private static SyncPluginProperties instance;
 
-//> CONSTRUCTORs	
+//> CONSTRUCTOR	
 	private SyncPluginProperties() {
 		super("plugin.sync");
 	}
@@ -64,13 +67,13 @@ public class SyncPluginProperties extends UserHomeFilePropertySet {
 	}
 	
 	public boolean isAutomaticStartup() {
-		String startupMode = super.getProperty(PROP_STARTUP_MODE);
+		String startupMode = super.getProperty(PROP_AUTO_START);
 		
 		return startupMode == null ? false : Boolean.parseBoolean(startupMode);
 	}
 	
 	public void setStartupMode(boolean mode) {
-		super.setProperty(PROP_STARTUP_MODE, Boolean.toString(mode));
+		super.setProperty(PROP_AUTO_START, Boolean.toString(mode));
 	}
 	
 //> STATIC FACTORIES
@@ -85,6 +88,7 @@ public class SyncPluginProperties extends UserHomeFilePropertySet {
 		return instance;
 	}
 
+	/** Gets a key-value parameter map */
 	public Map<String, String> getParamsMap() {
 		String[] keys = super.getPropertyValues(PROP_PARAM_KEYS, new String[0]);
 		String[] values = super.getPropertyValues(PROP_PARAM_VALS, new String[0]);

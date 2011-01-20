@@ -17,13 +17,13 @@ import net.frontlinesms.ui.UiGeneratorController;
 
 import org.springframework.context.ApplicationContext;
 
-@PluginControllerProperties(name = "SMS Sync Plugin",
-		iconPath = "/icons/basicplugin_logo_small.png",
+@PluginControllerProperties(name = "Sync Plugin",
+		iconPath = "/icons/sync_small.png",
 		springConfigLocation=PluginControllerProperties.NO_VALUE,
 		hibernateConfigPath=PluginControllerProperties.NO_VALUE,
 		i18nKey="plugins.sync.name")
 public class SyncPluginController extends BasePluginController implements EventObserver {
-
+//> PROPERTIES
 	private ApplicationContext appCon;
 	private FrontlineSMS frontlineController;
 	private QueueProcessor queueProcessor;
@@ -49,7 +49,7 @@ public class SyncPluginController extends BasePluginController implements EventO
 	}
 	
 	protected Object initThinletTab(UiGeneratorController uiController) {
-		this.tabController = new SyncPluginThinletTabController(this, uiController, appCon);
+		this.tabController = new SyncPluginThinletTabController(this, uiController);
 		
 		// Set the synchronisation URL on the UI
 		this.tabController.setSynchronisationURL(this.syncURL);
@@ -142,21 +142,23 @@ public class SyncPluginController extends BasePluginController implements EventO
 	 * @param state
 	 */
 	public synchronized void setQueueProcessorStatus(boolean state) {
-		if (state) {
-			// Re-create the queue processor
-			createQueueProcessor(true);
-		} else {
-			// Stop the queue processor
-			this.queueProcessor.stopProcessing();
-			
-			// Destroy the current queue processor reference
-			this.queueProcessor = null;
+		if (this.queueProcessor != null) {
+			if (state) {
+				// Re-create the queue processor
+				createQueueProcessor(true);
+			} else {
+				// Stop the queue processor
+				this.queueProcessor.stopProcessing();
+				
+				// Destroy the current queue processor reference
+				this.queueProcessor = null;
+			}
 		}
 	}
 	
 	@Override
 	public PluginSettingsController getSettingsController(UiGeneratorController ui) {
-		return new SyncPluginSettingsController(ui);
+		return new SyncPluginSettingsController(ui, getIcon(this.getClass()));
 	}
 	
 	/** Updates the UI with the sync URL and sucess*/

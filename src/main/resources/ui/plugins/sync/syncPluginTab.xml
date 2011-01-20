@@ -1,4 +1,4 @@
-<tab name="syncPluginTab" text="SMS Sync" icon="/icons/basicplugin_logo_large.png">
+<tab name="syncPluginTab" text="i18n.plugin.sync.name" icon="/icons/sync_large.png">
 	<panel columns="1" weightx="1" weighty="1" gap="15" top="9" right="9" bottom="9" left="9">
 	
 		<panel name="pnlSettings" columns="1" weightx="1" gap="10" top="5" right="5" bottom="5" left="5">

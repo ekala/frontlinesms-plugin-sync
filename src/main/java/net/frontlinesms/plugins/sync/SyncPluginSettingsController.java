@@ -5,7 +5,9 @@ package net.frontlinesms.plugins.sync;
 
 
 import net.frontlinesms.plugins.PluginSettingsController;
+import net.frontlinesms.plugins.sync.ui.SyncSettingsPanelHandler;
 import net.frontlinesms.ui.UiGeneratorController;
+import net.frontlinesms.ui.i18n.InternationalisationUtils;
 import net.frontlinesms.ui.settings.UiSettingsSectionHandler;
 
 /**
@@ -13,12 +15,13 @@ import net.frontlinesms.ui.settings.UiSettingsSectionHandler;
  *
  */
 public class SyncPluginSettingsController implements PluginSettingsController {
-	private final UiGeneratorController ui;
+	private static final String I18N_PLUGIN_SYNC_NAME = "plugin.sync.name";
 	private final SyncSettingsPanelHandler handler;
+	private String pluginIcon;
 
-	public SyncPluginSettingsController(UiGeneratorController ui) {
-		this.ui = ui;
-		handler = new SyncSettingsPanelHandler(ui);
+	public SyncPluginSettingsController(UiGeneratorController ui, String pluginIcon) {
+		this.pluginIcon = pluginIcon;
+		handler = new SyncSettingsPanelHandler(ui, this.getTitle(), this.pluginIcon);
 	}
 
 	/** @see net.frontlinesms.plugins.PluginSettingsController#addSubSettingsNodes(java.lang.Object) */
@@ -45,13 +48,13 @@ public class SyncPluginSettingsController implements PluginSettingsController {
 	 * @see net.frontlinesms.plugins.PluginSettingsController#getTitle()
 	 */
 	public String getTitle() {
-		return "SMS Sync";
+		return InternationalisationUtils.getI18nString(I18N_PLUGIN_SYNC_NAME);
 	}
 
 	/**
 	 * @see net.frontlinesms.plugins.PluginSettingsController#getRootNode()
 	 */
 	public Object getRootNode() {
-		return ui.createNode("SMS Sync", this.handler);
+		return this.handler.getSectionNode();
 	}
 }
