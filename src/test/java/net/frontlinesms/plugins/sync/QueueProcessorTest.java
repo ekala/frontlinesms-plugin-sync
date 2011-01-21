@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
  */
 public class QueueProcessorTest extends BaseTestCase {
 	public void testProcessMessage() {
-		// Give the processor is set up
+		// Given the processor is set up
 		QueueProcessor processor = new QueueProcessor();
 		MessageSyncher syncher = mock(MessageSyncher.class);
 		processor.setMessageSyncher(syncher);

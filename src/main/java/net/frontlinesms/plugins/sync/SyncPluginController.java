@@ -142,17 +142,15 @@ public class SyncPluginController extends BasePluginController implements EventO
 	 * @param state
 	 */
 	public synchronized void setQueueProcessorStatus(boolean state) {
-		if (this.queueProcessor != null) {
-			if (state) {
-				// Re-create the queue processor
-				createQueueProcessor(true);
-			} else {
-				// Stop the queue processor
-				this.queueProcessor.stopProcessing();
-				
-				// Destroy the current queue processor reference
-				this.queueProcessor = null;
-			}
+		if (state && this.queueProcessor == null) {
+			// Re-create the queue processor
+			createQueueProcessor(true);
+		} else if (!state && this.queueProcessor != null) {
+			// Stop the queue processor
+			this.queueProcessor.stopProcessing();
+
+			// Destroy the current queue processor reference
+			this.queueProcessor = null;
 		}
 	}
 	

@@ -7,18 +7,14 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.Map.Entry;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.log4j.Logger;
 
 import net.frontlinesms.FrontlineUtils;
 import net.frontlinesms.data.domain.FrontlineMessage;
-import net.frontlinesms.data.domain.KeywordAction.KeywordUtils;
 import net.frontlinesms.messaging.MessageFormatter;
 
 /**
@@ -119,7 +115,7 @@ public class MessageSyncher {
 
 	/** Creates a map of the parameters to be passed to the base url */
 	private Map<String, String> createRequestParam(FrontlineMessage message) {
-		HashMap<String, String> params = new HashMap<String, String>();
+		HashMap<String, String> params = new LinkedHashMap<String, String>();
 		
 		for (Entry<String, String> entry: templateParams.entrySet()) {
 			String paramName = entry.getKey();
@@ -137,8 +133,8 @@ public class MessageSyncher {
 	
 	/** Gets the HttpRequest URL used for synchronisation */
 	public String getHttpRequestURL(FrontlineMessage message) {
-		String urlVariables = buildRequestString(createRequestParam(message));
-		
-		return requestMethod.equals(GET)? this.baseURL + "?" + urlVariables : this.baseURL;
+		return requestMethod.equals(GET)
+				? this.baseURL + "?" + buildRequestString(createRequestParam(message))
+				: this.baseURL;
 	}
 }

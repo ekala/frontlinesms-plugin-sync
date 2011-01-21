@@ -3,15 +3,9 @@
  */
 package net.frontlinesms.plugins.sync;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.HibernateTemplate;
-
-import net.frontlinesms.FrontlineSMS;
 import net.frontlinesms.data.domain.Contact;
 import net.frontlinesms.data.domain.FrontlineMessage;
 import net.frontlinesms.data.events.EntitySavedNotification;
-import net.frontlinesms.data.repository.MessageDao;
-import net.frontlinesms.data.repository.hibernate.HibernateMessageDao;
 import net.frontlinesms.events.EventBus;
 import net.frontlinesms.events.EventObserver;
 import net.frontlinesms.events.FrontlineEventNotification;
@@ -126,5 +120,31 @@ public class SyncPluginControllerTest extends BaseTestCase {
 			// Then the message is queued
 			verify(qProcessor).queue(message);
 		}
+		
 	}
+	
+	public void testSetQueueProcessorStatus() {
+		// Given the controller is set up
+		SyncPluginController controller = new SyncPluginController();
+		QueueProcessor processor = mock(QueueProcessor.class);
+		controller.setQueueProcessor(processor);
+		
+		{
+			//When the queue processor is started
+			controller.setQueueProcessorStatus(true);
+			
+			// Then the stop processing 
+			verify(processor).stopProcessing();
+			
+		}
+		
+		{
+			// When the queue processor is stopped
+			controller.setQueueProcessorStatus(false);
+			
+			// Then the queue processor thread is started
+			verify(processor).start();
+		}
+	}
+
 }
