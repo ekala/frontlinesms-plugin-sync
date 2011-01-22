@@ -10,7 +10,7 @@
 			</panel>
 								
 			<!-- auto start up checkbox -->
-			<checkbox name="chkStartAutomatically" text="i18n.plugin.sync.start.automatically" />
+			<checkbox name="chkStartAutomatically" text="i18n.plugin.sync.start.automatically" action="changeStartupMode(this.selected)"/>
 			<!-- /auto start up checkbox-->
 		</panel>
 		

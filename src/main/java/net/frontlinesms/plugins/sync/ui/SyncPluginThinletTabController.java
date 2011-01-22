@@ -13,7 +13,7 @@ public class SyncPluginThinletTabController extends BasePluginThinletTabControll
 //> UI FILES	
 	private static final String TAB_XML_FILE = "/ui/plugins/sync/syncPluginTab.xml";
 	
-//> UI COMPONENTS	
+//> UI COMPONENTS
 	private static final String COMPONENT_CHK_STARTUP_MODE = "chkStartAutomatically";
 	private static final String COMPONENT_FLD_SYNCHRONISATION_URL = "txtSynchronisationURL";
 	private static final String COMPONENT_BTN_START_SYNC = "btnStartSynchronisation";
@@ -87,13 +87,6 @@ public class SyncPluginThinletTabController extends BasePluginThinletTabControll
 		return ui.find(this.tabComponent, COMPONENT_CHK_STARTUP_MODE);
 	}
 	
-	/**
-	 * Gets the start up mode currently specified in the UI 
-	 * @return
-	 */
-	public boolean getStartupMode() {
-		return ui.isSelected(ui.find(this.tabComponent, COMPONENT_CHK_STARTUP_MODE));
-	}
 	
 	/** Event helper method for pausing/stopping the synchronisation thread */
 	public void stopSynchronisation(Object startButton, Object stopButton) {
@@ -115,7 +108,6 @@ public class SyncPluginThinletTabController extends BasePluginThinletTabControll
 		ui.setEnabled(stopButton, state);
 		ui.setEnabled(startButton, !state);
 		ui.setEnabled(getSyncUrlField(), !state);
-		ui.setEnabled(getStartupModeCheckBox(), !state);
 		
 		// Send stop signal to queue processor
 		SyncPluginController pluginController = (SyncPluginController)getPluginController();
@@ -164,5 +156,17 @@ public class SyncPluginThinletTabController extends BasePluginThinletTabControll
 				}
 			}
 		}
+	}
+	
+	/** 
+	 * Changes the "autostart" setting in the properties file the when the selected property of the auto start
+	 * button is toggled
+	 * 
+	 * @param mode New nalue for the "autostart" setting
+	 */
+	public void changeStartupMode(boolean mode) {
+		SyncPluginProperties properties = SyncPluginProperties.getInstance();
+		properties.setStartupMode(mode);
+		properties.saveToDisk();
 	}
 }
