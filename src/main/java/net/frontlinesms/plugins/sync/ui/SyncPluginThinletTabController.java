@@ -19,6 +19,8 @@ public class SyncPluginThinletTabController extends BasePluginThinletTabControll
 	private static final String COMPONENT_BTN_START_SYNC = "btnStartSynchronisation";
 	private static final String COMPONENT_BTN_STOP_SYNC = "btnStopSynchronisation";
 	private static final String COMPONENT_TB_SYNCHRONISATION_LOG = "tblSychronisationLog";
+	/** Help page for the sync plugin */
+	private static final String HELP_FILE_NAME = "sync.htm";
 	
 //> PROPERTIES	
 	private Object tabComponent;
@@ -169,4 +171,5 @@ public class SyncPluginThinletTabController extends BasePluginThinletTabControll
 		properties.setStartupMode(mode);
 		properties.saveToDisk();
 	}
+	
 }

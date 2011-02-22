@@ -1,0 +1,125 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>FrontlineSMS Help :: Sync Plugin</title>
+</head>
+
+<style type="text/css">
+A:link {text-decoration: none}
+A:visited {text-decoration: none}
+A:active {text-decoration: none}
+A:hover {text-decoration: underline; }
+</style>
+
+<body bgcolor="#F4F4F4">
+
+<p>&nbsp;</p>
+<div align="center">
+  <center>
+  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="950">
+    <tr>
+      <td width="763" style="border-bottom-style: solid; border-bottom-width: 1" bordercolor="#CC0066">
+      <br>
+&nbsp;<p>&nbsp;</p>
+      <p>&nbsp;</td>
+      <td width="187" valign="top" style="border-bottom-style: solid; border-bottom-width: 1" bordercolor="#CC0066">
+      <a href="help-menu.htm">
+      <img border="0" src="img/flsmslogo.png" align="right" hspace="0" width="150" height="87"></a></td>
+    </tr>
+  </table>
+  </center>
+</div>
+<div align="center">
+  <center>
+  <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="950">
+    <tr>
+      <td><b><font face="Arial" size="4"><br>
+      </font><font face="Arial" size="5">Sync</font></b><p>
+	  <font face="Arial" size="2" color="#666666"> The Sync plugin is for pushing text messages received on FrontlineSMS to a website</font></i></p>
+      <p>
+      <img border="0" src="img/sync-tab.png" width="980" height="600" vspace="5"></p>
+      <p>
+      <b><i><font face="Arial" size="2" color="#336699"><br>
+      NOTE</font></i></b><i><font face="Arial" size="2" color="#336699">:<b>
+      </b>To use Sync, you must be running FrontlineSMS version <b>
+      1.7.00 or above</b>. To find out, check the top left of the screen when 
+      running FrontlineSMS. The number that appears is the version you are 
+      running. If you need an upgrade and haven't received an email invitation 
+      to do so, get in touch via the
+      <a target="_blank" href="http://frontlinesms.com/talk/contact.php">
+      <font color="#800000">Contact </font></a> form on the website</font></i></p>
+
+      <p><b><font face="Arial" color="#333333">What is Sync?</font></b></p>
+      <p><font face="Arial" size="2" color="#111111">The <b>Sync</b></font><font face="Arial" size="2" color="#666666"> 
+      plugin is a tool which can be used to pushing messages to  website/webserver e.g. an Ushahidi instance. It is built for situations where
+      where a FrontlineSMS user would like to sync received messages with a publicly accessible website. For purposes of synchronisation,
+      Sync requires an Internet connection but if this is not available, it queues up the messages and pushes them to the target URL
+      once connectivity is restored. Usually, the target website will have a URL format in which is used fo receiving messages being 
+      pushed to it. For example: <i>http://example.com/messages?key=kDE48Aq&s={sender_number}&m={message_content} </i>
+      where: {sender_number} is the phone number of the person sending the message and {message_content} is the body of the text message.
+	  </font></p>
+	  
+      <p><font face="Arial" size="2" color="#666666">The URL to which messages are being pushed to is shown in  
+       <font face="Arial" size="2" color="#FF9900">[<b>2</b>]</font>.
+       </font>
+      </p>
+      
+      <p><font face="Arial" size="2" color="#666666"> 
+      The Synchronization History <font face="Arial" size="2" color="#FF9900"><b>[1] </b></font> is a log of all the sync activity taking place <i>(Messages are only pushed to the sync URL only after
+      they have been saved in the FrontlineSMS database) </i> and <font face="Arial" size="2" color="#FF9900"><b>[4] </b></font> is used to clear the synchronisation log. 
+      </font>
+      </p><i><a name="formseditor">&nbsp;</a><font></font></i><b><font face="Arial" color="#333333"><br>
+      Setting up Sync</font></b>
+      <p><font face="Arial" size="2" color="#666666">To set up the sync plugin, open the Preferences window;
+      <br/><img src="img/frontline-preferences.png" border="0" alt="Preferences"/>
+      </font>
+      </p>
+      
+      <p><font face="Arial" size="2" color="#666666">
+      This should bring up the following window:<br/>
+      <img src="img/sync-settings.png" border="0" alt="Sync Settings" />
+      </font>
+      </p>
+      
+      <p><font face="Arial" size="2" color="#666666">
+      The Synchornization URL  <font face="Arial" size="2" color="#FF9900"><b>[2] </b></font> is the URL to which the messages will be pushed to and 
+       <font face="Arial" size="2" color="#FF9900"><b>[1] </b></font> is the list of parameters that shall be fed to the Synchronisation URL. The parameter
+       list can be modified by using the <font face="Arial" size="2" color="#336699"><b>Add </b></font>  
+       <font face="Arial" size="2" color="#FF9900"><b>[3] </b></font> and <font face="Arial" size="2" color="#336699"><b>Delete </b></font>
+       <font face="Arial" size="2" color="#FF9900"><b>[4] </b></font> buttons to create and remove parameters respectively.
+      </font>
+      </p>
+      
+      <p><font face="Arial" size="2" color="#666666">
+      Clicking the <font face="Arial" size="2" color="#336699"><b>Add </b></font> button above on the Sync plugin settings window above brings up the following dialog; <br/>
+      <img src="img/add-parameter.png" border="0" alt="Add Parameter"/>
+      <p>
+      <font face="Arial" size="2" color="#336699"><b>Key</b></font> is the name of the parameter on the target website. Therefore, if the URL for receiving text messages on
+      the target website is <i>http://example.com/sms/?key=4595DFJ&s={sender_number}&m={message}</i>, the value of <font face="Arial" size="2" color="#336699"><b>key </b></font>
+      could be "key", "s" or "m" while <font face="Arial" size="2" color="#336699"><b>Value</b></font> could be "4595DFJ", {sender_number} or {message}.
+      </p>
+      
+      <p>
+      During synchronisation, Sync re-constructs the synchornisation URL to include these parameters and substitutes all items in "{}"
+      with the actual values of the message
+      </p>
+      </font>
+      </p>
+       
+      </td>
+    </tr>
+    <tr>
+      <td><font size="1" face="Arial"><a href="help-menu.htm">Return to Help 
+      main menu</a></font><p>&nbsp;</td>
+    </tr>
+  </table>
+  </center>
+</div>
+
+</body>
+
+</html>

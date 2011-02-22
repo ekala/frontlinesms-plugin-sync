@@ -1,30 +1,32 @@
 <tab name="syncPluginTab" text="i18n.plugin.sync.name" icon="/icons/sync_large.png">
-	<panel columns="1" weightx="1" weighty="1" gap="15" top="9" right="9" bottom="9" left="9">
-	
-		<panel name="pnlSettings" columns="1" weightx="1" gap="10" top="5" right="5" bottom="5" left="5">
-			<panel columns="4" weightx="1" gap="10" top="5" left="5" bottom="5" right="5">
-				<label text="Synchronisation URL" width="50"/>
-				<textfield name="txtSynchronisationURL" weightx="1" columns="300" text="http://"/>
-				<button name="btnStartSynchronisation" icon="/icons/start.png" text="i18n.plugin.sync.common.start" action="startSynchronisation(this, btnStopSynchronisation)"/>
-				<button name="btnStopSynchronisation" icon="/icons/stop.png" text="i18n.plugin.sync.common.stop" action="stopSynchronisation(btnStartSynchronisation, this)"/>
+	<panel columns="2" gap="9" top="9" right="9" bottom="9" left="9">
+		<label valign="top" icon="/icons/header/sync-plugin-header.png"/>
+		<panel columns="1" weightx="1" weighty="1" gap="9" top="9" right="9" bottom="9" left="9">
+			<panel name="pnlSettings" columns="1" weightx="1">
+				<panel columns="4" weightx="1" gap="10" top="5" left="5" bottom="5" right="5">
+					<label text="Synchronisation URL" width="50"/>
+					<textfield name="txtSynchronisationURL" weightx="1" columns="300" text="http://"/>
+					<button name="btnStartSynchronisation" icon="/icons/start.png" text="i18n.plugin.sync.common.start" action="startSynchronisation(this, btnStopSynchronisation)"/>
+					<button name="btnStopSynchronisation" icon="/icons/stop.png" text="i18n.plugin.sync.common.stop" action="stopSynchronisation(btnStartSynchronisation, this)"/>
+				</panel>
+									
+				<!-- auto start up checkbox -->
+				<checkbox name="chkStartAutomatically" text="i18n.plugin.sync.start.automatically" action="changeStartupMode(this.selected)"/>
+				<!-- /auto start up checkbox-->
 			</panel>
-								
-			<!-- auto start up checkbox -->
-			<checkbox name="chkStartAutomatically" text="i18n.plugin.sync.start.automatically" action="changeStartupMode(this.selected)"/>
-			<!-- /auto start up checkbox-->
+			
+			<!-- synchronisation log -->
+			<table name="tblSychronisationLog" weightx="1" weighty="1">
+				<header>
+					<column text="i18n.plugin.sync.synchronisation.log" width="500" />
+				</header>
+			</table>
+			<!-- /synchronisation log -->
 		</panel>
 		
-		<!-- synchronisation log -->
-		<table name="tblSychronisationLog" weightx="1" weighty="1">
-			<header>
-				<column text="i18n.plugin.sync.synchronisation.log" width="500" />
-			</header>
-		</table>
-		<!-- /synchronisation log -->
-		
-		<panel columns="1" weightx="1" halign="right" gap="10" top="5" right="5" bottom="5" left="5">
+		<button icon="/icons/big_help.png" valign="bottom" type="link" action="showHelpPage('sync.htm')"/>
+		<panel columns="1" weightx="1" halign="right" gap="5">
 			<button name="btnClear" icon="/icons/clear.png" text="i18n.action.clear" action="clearSynchronisationLog(tblSychronisationLog)"/>
 		</panel>
-		
 	</panel>	
 </tab>
