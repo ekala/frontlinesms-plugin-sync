@@ -1,51 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>net.frontlinesms.plugins</groupId>
-  <artifactId>frontlinesms-plugin-sync</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>Basic Plugin</name>
-  <description>A shell of a plugin for FrontlineSMS</description>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.frontlinesms.plugins</groupId>
+	<artifactId>frontlinesms-plugin-sync</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Sync Plugin</name>
+	<description>Plugin for syncing all incoming SMS messages with an external service over HTTP</description>
+	<parent>
+		<groupId>net.frontlinesms.core</groupId>
+		<artifactId>frontlinesms-pom-parent</artifactId>
+		<version>1.7.00-beta-5-SNAPSHOT</version>
+		<relativePath>../pom-parent</relativePath>
+	</parent>
   
-  
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-  
-    <dependencies>
+	<dependencies>
 		<dependency>
 			<groupId>net.frontlinesms.core</groupId>
 			<artifactId>frontlinesms</artifactId>
-			<version>1.7.00-beta-2-SNAPSHOT</version>
-			<scope>compile</scope>
 		</dependency>
-		
-		<!-- Test Dependencies -->
-		<dependency>
-			<groupId>net.frontlinesms.core</groupId>
-			<artifactId>frontlinesms-test</artifactId>
-			<version>0.01.01</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>2.5.6</version>
-			<type>jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.8.2</version>
-			<scope>test</scope> 
-		</dependency>
-  </dependencies>
+	</dependencies>
 </project>
