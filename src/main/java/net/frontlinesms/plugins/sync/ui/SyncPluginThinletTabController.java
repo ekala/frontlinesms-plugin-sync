@@ -74,7 +74,7 @@ public class SyncPluginThinletTabController extends BasePluginThinletTabControll
 	 */ 
 	public String getSynchronisationURL() {
 		String url = ui.getText(getSyncUrlField());
-		return (url.length() == 0 || url == null)?"" : url;
+		return (url == null) ? "" : url;
 	}
 	
 	/** Gets a reference to the sync url textfield UI component */

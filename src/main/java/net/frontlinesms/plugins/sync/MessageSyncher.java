@@ -3,6 +3,7 @@
  */
 package net.frontlinesms.plugins.sync;
 
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -93,7 +94,7 @@ public class MessageSyncher {
 			
 			return conn.getResponseCode() == HttpURLConnection.HTTP_OK;
 			
-		} catch (Exception e) {
+		} catch (IOException e) {
 			return false;
 		} finally {
 			try { out.close(); } catch(Exception ex) { /* ignore */ }
