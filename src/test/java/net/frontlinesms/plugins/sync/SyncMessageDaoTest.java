@@ -1,5 +1,4 @@
 package net.frontlinesms.plugins.sync;
-import java.lang.reflect.Field;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +7,6 @@ import net.frontlinesms.data.domain.FrontlineMessage;
 import net.frontlinesms.data.repository.MessageDao;
 import net.frontlinesms.junit.HibernateTestCase;
 import net.frontlinesms.plugins.sync.SyncMessageDao;
-
-import static org.mockito.Mockito.*;
 
 /**
  * 

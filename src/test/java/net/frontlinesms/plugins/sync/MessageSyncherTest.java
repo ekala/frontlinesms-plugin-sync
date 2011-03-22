@@ -10,9 +10,9 @@ import net.frontlinesms.junit.BaseTestCase;
 /**
  * Unit tests for {@link MessageSyncher}
  * @author Emmanuel Kala <emmanuel(at)ushahidi.com>
- *
  */
 public class MessageSyncherTest extends BaseTestCase {
+	@SuppressWarnings("serial")
 	public void testGetHttpRequestURL() {
 		// Given the syncher has been set up
 		MessageSyncher syncher = new MessageSyncher("http://example.com", new LinkedHashMap<String, String>() {

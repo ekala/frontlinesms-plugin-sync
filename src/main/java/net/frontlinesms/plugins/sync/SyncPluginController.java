@@ -24,7 +24,6 @@ import org.springframework.context.ApplicationContext;
 		i18nKey="plugins.sync.name")
 public class SyncPluginController extends BasePluginController implements EventObserver {
 //> PROPERTIES
-	private ApplicationContext appCon;
 	private FrontlineSMS frontlineController;
 	private QueueProcessor queueProcessor;
 	private SyncMessageDao syncMessageDao;
@@ -61,7 +60,6 @@ public class SyncPluginController extends BasePluginController implements EventO
 	}
 
 	public void init(FrontlineSMS frontlineController, ApplicationContext applicationContext) throws PluginInitialisationException {
-		this.appCon = applicationContext;
 		this.frontlineController = frontlineController;
 		
 		// Create the queue processor
@@ -107,7 +105,7 @@ public class SyncPluginController extends BasePluginController implements EventO
 	public void deinit() {
 		// Shutdown message processor and discard
 		this.eventBus.unregisterObserver(this);
-		setQueueProcessorStatus(false);
+		stopIfRunning();
 	}
 
 	private void queueUnsynchronizedMessages() {
@@ -120,32 +118,28 @@ public class SyncPluginController extends BasePluginController implements EventO
 	}
 
 	public void notify(FrontlineEventNotification e) {
-		if(e instanceof EntitySavedNotification) {
-			Object databaseEntity = ((EntitySavedNotification) e).getDatabaseEntity();
+		if(e instanceof EntitySavedNotification<?>) {
+			Object databaseEntity = ((EntitySavedNotification<?>) e).getDatabaseEntity();
 			if(databaseEntity instanceof FrontlineMessage) {
 				// Get the frontline message instance
 				FrontlineMessage m = (FrontlineMessage) databaseEntity;
 				
-				// Only trap for received messages when the queue processor is running
-				boolean isAlive = this.queueProcessor != null && this.queueProcessor.isAlive();
-				if (m.getType() == FrontlineMessage.Type.RECEIVED && isAlive) {
+				if (m.getType() == FrontlineMessage.Type.RECEIVED) {
 					this.queueProcessor.queue(m);
 				}
 			}
 		}
 	}
 	
-	/**
-	 * Sets the state of the queue processor. If <code>false</code> the queue processor
-	 * is paused else its resumed
-	 * 
-	 * @param state
-	 */
-	public synchronized void setQueueProcessorStatus(boolean state) {
-		if (state && this.queueProcessor == null) {
+	public synchronized void startIfNotStarted() {
+		if(this.queueProcessor == null) {
 			// Re-create the queue processor
 			createQueueProcessor(true);
-		} else if (!state && this.queueProcessor != null) {
+		}
+	}
+	
+	public synchronized void stopIfRunning() {
+		if(this.queueProcessor != null) {
 			// Stop the queue processor
 			this.queueProcessor.stopProcessing();
 

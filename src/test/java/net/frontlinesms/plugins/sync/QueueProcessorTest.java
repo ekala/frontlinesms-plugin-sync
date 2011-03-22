@@ -45,7 +45,7 @@ public class QueueProcessorTest extends BaseTestCase {
 		
 		{
 			// When a message is processed and it succeeds
-			FrontlineMessage goodMessage = mock(FrontlineMessage.class);
+			FrontlineMessage goodMessage = SyncTestUtils.createOutgoingMessage();
 			when(syncher.syncMessage(goodMessage)).thenReturn(true);
 			processor.processMessage(goodMessage);
 			

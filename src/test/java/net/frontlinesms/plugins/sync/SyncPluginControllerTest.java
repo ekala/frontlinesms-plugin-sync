@@ -71,6 +71,7 @@ public class SyncPluginControllerTest extends BaseTestCase {
 		verify(processor).stopProcessing();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void testNotify() {
 		// Given the controller is set up
 		SyncPluginController controller = new SyncPluginController();
@@ -88,7 +89,6 @@ public class SyncPluginControllerTest extends BaseTestCase {
 		
 		{
 			// When a EntitySavedNotification is fired for an irrelevant data type
-			@SuppressWarnings("rawtypes")
 			EntitySavedNotification n = mock(EntitySavedNotification.class);
 			Contact contact = mock(Contact.class);
 			when(n.getDatabaseEntity()).thenReturn(contact);
@@ -100,7 +100,6 @@ public class SyncPluginControllerTest extends BaseTestCase {
 		
 		{
 			// When a EntitySavedNotification is fired for a outoging message
-			@SuppressWarnings("rawtypes")
 			EntitySavedNotification n = mock(EntitySavedNotification.class);
 			when(n.getDatabaseEntity()).thenReturn(SyncTestUtils.createOutgoingMessage());
 			controller.notify(n);
@@ -111,7 +110,6 @@ public class SyncPluginControllerTest extends BaseTestCase {
 		
 		{
 			// When a EntitySavedNotification is fired for an incoing message
-			@SuppressWarnings("rawtypes")
 			EntitySavedNotification n = mock(EntitySavedNotification.class);
 			FrontlineMessage message = SyncTestUtils.createIncomingMessage();
 			when(n.getDatabaseEntity()).thenReturn(message);
@@ -120,31 +118,5 @@ public class SyncPluginControllerTest extends BaseTestCase {
 			// Then the message is queued
 			verify(qProcessor).queue(message);
 		}
-		
 	}
-	
-	public void testSetQueueProcessorStatus() {
-		// Given the controller is set up
-		SyncPluginController controller = new SyncPluginController();
-		QueueProcessor processor = mock(QueueProcessor.class);
-		controller.setQueueProcessor(processor);
-		
-		{
-			//When the queue processor is started
-			controller.setQueueProcessorStatus(true);
-			
-			// Then the stop processing 
-			verify(processor).stopProcessing();
-			
-		}
-		
-		{
-			// When the queue processor is stopped
-			controller.setQueueProcessorStatus(false);
-			
-			// Then the queue processor thread is started
-			verify(processor).start();
-		}
-	}
-
 }
