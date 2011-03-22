@@ -33,7 +33,7 @@ public class MessageSyncher {
 	/** Stores the key=>value mapping of the URL variables */
 	private Map<String, String> templateParams;
 	/** Loggger */
-	private static final Logger LOG = FrontlineUtils.getLogger(MessageSyncher.class);
+	private final Logger log = FrontlineUtils.getLogger(getClass());
 	
 //> CONSTRUCTORS 
 	/**
@@ -76,7 +76,7 @@ public class MessageSyncher {
 		}
 		
 		// Modify the url depending on the request method
-		LOG.debug("Sending synchronisation request: " + url);
+		log.debug("Sending synchronisation request: " + url);
 		
 		HttpURLConnection conn = null;
 		OutputStreamWriter out = null;
@@ -97,8 +97,8 @@ public class MessageSyncher {
 		} catch (IOException e) {
 			return false;
 		} finally {
-			try { out.close(); } catch(Exception ex) { /* ignore */ }
-			try { conn.disconnect(); } catch(Exception ex) { /* ignore */ }
+			try { out.close(); } catch(Exception ex) { log.info(ex); }
+			try { conn.disconnect(); } catch(Exception ex) { log.info(ex); }
 		}
 	}
 
